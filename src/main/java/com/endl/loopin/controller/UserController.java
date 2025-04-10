@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.endl.loopin.service.UserService;
+import com.endl.loopin.dto.UserDto;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/user")
@@ -23,9 +25,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody String user) {
-        // Call service to create a new user
-        userService.createUser(user);
+    public ResponseEntity<String> createUser(@RequestBody UserDto userDto) {
+        // Map UserDto to User entity and call service to create a new user
+        userService.createUser(userDto);
         return ResponseEntity.ok("User created successfully");
     }
 }
