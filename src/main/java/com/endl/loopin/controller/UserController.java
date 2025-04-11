@@ -5,7 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.endl.loopin.service.UserService;
-import com.endl.loopin.dto.UserDto;
+import com.endl.loopin.dto.SignUpUserDto;
+import com.endl.loopin.dto.UserDetailsDto;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,16 +18,53 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * For fetching all users.
+     * 
+     * @return A ResponseEntity containing a list of UserDetailsDto objects.
+     * 
+     *         Endpoint: /user
+     *         HTTP Method: GET
+     *         Response: 200 OK with a list of UserDetailsDto objects.
+     */
     @GetMapping
-    public ResponseEntity<List<String>> getAllUsers() {
-        // Call service to get all users
-        List<String> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDetailsDto>> getAllUsers() {
+        List<UserDetailsDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody UserDto userDto) {
-        // Map UserDto to User entity and call service to create a new user
+    /**
+     * For fetching a specific user by ID.
+     * 
+     * @param id The ID of the user to fetch.
+     * @return A ResponseEntity containing the UserDetailsDto object for the specified
+     *         user.
+     * 
+     *         Endpoint: /user/{id}
+     *         HTTP Method: GET
+     *         Response: 200 OK with the UserDetailsDto object for the specified user.
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDetailsDto> getUserById(@PathVariable Long id) {
+        UserDetailsDto user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
+
+    /**
+     * For user signup.
+     * 
+     * @param userDto The DTO containing user signup details.
+     * @return A ResponseEntity containing a success message if the user is created
+     *         successfully.
+     * 
+     *         Endpoint: /user/signup
+     *         HTTP Method: POST
+     *         Request Body: SignUpUserDto (JSON)
+     *         Response: 200 OK with a success message.
+     */
+    @PostMapping("/signup")
+    public ResponseEntity<String> createUser(@RequestBody SignUpUserDto userDto) {
         userService.createUser(userDto);
         return ResponseEntity.ok("User created successfully");
     }
