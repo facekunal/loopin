@@ -1,31 +1,35 @@
 package com.endl.loopin.entity;
 
+import lombok.Data;
+
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table(name = "session_history")
 @Data // generate getters, setters, toString, equals, and hashCode
-public class User {
-
+public class SessionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String userId;
 
-    private String email;
+    private LocalDateTime startedAt;
 
-    private boolean isEmailVerified;
-
-    private String passwordHash;
-
-    private boolean isTwoFactorEnabled;
+    private LocalDateTime lastActiveAt;
+    
+    private String userAgent;
 
     @CreatedDate
     @Column(updatable = false)

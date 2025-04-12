@@ -1,31 +1,31 @@
 package com.endl.loopin.entity;
 
-import java.sql.Timestamp;
+import jakarta.persistence.*;
+import lombok.Data;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "user")
+@Table(name = "request")
 @Data // generate getters, setters, toString, equals, and hashCode
-public class User {
+public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private Long userId;
 
-    private String email;
+    private Integer status;
 
-    private boolean isEmailVerified;
+    private Integer responseCode;
 
-    private String passwordHash;
+    private Timestamp startedAt;
 
-    private boolean isTwoFactorEnabled;
+    private Timestamp endedAt;
 
     @CreatedDate
     @Column(updatable = false)

@@ -2,8 +2,13 @@ package com.endl.loopin.dto;
 
 import lombok.Data;
 
+/**
+ * DTO for user details.
+ * This class is used to transfer user-related to clients.
+ */
 @Data
 public class UserDetailsDto {
+
     private Long id;
     private String name;
     private String email;
