@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.endl.loopin.service.UserService;
 import com.endl.loopin.dto.SignUpUserDto;
 import com.endl.loopin.dto.UserDetailsDto;
+import com.endl.loopin.dto.SignInUserDto;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,5 +68,27 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody SignUpUserDto userDto) {
         userService.createUser(userDto);
         return ResponseEntity.ok("User created successfully");
+    }
+
+    /**
+     * For user signin.
+     * 
+     * @param signInUserDto The DTO containing user signin details.
+     * @return A ResponseEntity containing a success message if the user is authenticated
+     *         successfully.
+     * 
+     *         Endpoint: /user/signin
+     *         HTTP Method: POST
+     *         Request Body: SignInUserDto (JSON)
+     *         Response: 200 OK with a success message or 401 Unauthorized if authentication fails.
+     */
+    @PostMapping("/signin")
+    public ResponseEntity<String> signInUser(@RequestBody SignInUserDto signInUserDto) {
+        boolean isAuthenticated = userService.authenticateUser(signInUserDto.getEmail(), signInUserDto.getPassword());
+        if (isAuthenticated) {
+            return ResponseEntity.ok("User signed in successfully");
+        } else {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
     }
 }
