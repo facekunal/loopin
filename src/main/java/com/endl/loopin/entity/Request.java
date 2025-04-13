@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "request")
+@Table(name = "requests")
 @Data // generate getters, setters, toString, equals, and hashCode
 public class Request {
 

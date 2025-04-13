@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Data // generate getters, setters, toString, equals, and hashCode
 public class User {
 
