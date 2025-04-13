@@ -1,6 +1,8 @@
 package com.endl.loopin.service;
 
 import org.springframework.stereotype.Service;
+
+import com.endl.loopin.dto.SignInUserDto;
 import com.endl.loopin.dto.SignUpUserDto;
 import com.endl.loopin.dto.UserDetailsDto;
 import com.endl.loopin.entity.User;
@@ -16,19 +18,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder = new PasswordEncoder() {
-        @Override
-        public String encode(CharSequence rawPassword) {
-            // Implement your encoding logic here
-            return rawPassword.toString(); // Placeholder, replace with actual encoding
-        }
-
-        @Override
-        public boolean matches(CharSequence rawPassword, String encodedPassword) {
-            // Implement your matching logic here
-            return rawPassword.toString().equals(encodedPassword); // Placeholder, replace with actual matching
-        }
-    };
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // TODO: @kunal use mapper
     // @Autowired
@@ -54,7 +45,7 @@ public class UserService {
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setPasswordHash(userDto.getPasswordHash());
+        user.setPasswordHash(userDto.getPassword());
         
         // by default false when a new user is created
         user.setEmailVerified(false);
@@ -64,9 +55,21 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean authenticateUser(String email, String rawPassword) {
-        return userRepository.findByEmail(email) // Correct usage of findBy
-                .map(user -> passwordEncoder.matches(rawPassword, user.getPasswordHash()))
+    public boolean signin(SignInUserDto request) {
+        return userRepository.findByEmail(request.getEmail())
+                .map(user -> passwordEncoder.matches(request.getPassword(), user.getPasswordHash()))
                 .orElse(false);
+    }
+
+    public void signup(SignUpUserDto request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already in use");
+        }
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
     }
 }
