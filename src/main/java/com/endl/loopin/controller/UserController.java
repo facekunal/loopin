@@ -5,8 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.endl.loopin.service.UserService;
+
+import jakarta.validation.Valid;
+
 import com.endl.loopin.dto.SignUpUserDto;
 import com.endl.loopin.dto.UserDetailsDto;
+import com.endl.loopin.dto.SignInUserDto;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,8 +68,42 @@ public class UserController {
      *         Response: 200 OK with a success message.
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> createUser(@RequestBody SignUpUserDto userDto) {
-        userService.createUser(userDto);
-        return ResponseEntity.ok("User created successfully");
+    public ResponseEntity<String> createUser(@Valid @RequestBody SignUpUserDto userDto) {
+        try {
+            userService.signup(userDto);
+            return ResponseEntity.ok("User created successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred during signup");
+        }
+    }
+
+    /**
+     * For user signin.
+     * 
+     * @param signInUserDto The DTO containing user signin details.
+     * @return A ResponseEntity containing a success message if the user is authenticated
+     *         successfully.
+     * 
+     *         Endpoint: /user/signin
+     *         HTTP Method: POST
+     *         Request Body: SignInUserDto (JSON)
+     *         Response: 200 OK with a success message or 401 Unauthorized if authentication fails.
+     */
+    @PostMapping("/signin")
+    public ResponseEntity<String> signInUser(@Valid @RequestBody SignInUserDto signInUserDto) {
+        try {
+            boolean isAuthenticated = userService.signin(signInUserDto);
+            if (isAuthenticated) {
+                return ResponseEntity.ok("User signed in successfully");
+            } else {
+                return ResponseEntity.status(401).body("Invalid credentials");
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred during signin");
+        }
     }
 }

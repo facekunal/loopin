@@ -16,7 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "session_history")
+@Table(name = "sessions_history")
 @Data // generate getters, setters, toString, equals, and hashCode
 public class SessionHistory {
     @Id

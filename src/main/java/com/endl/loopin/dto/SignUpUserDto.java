@@ -1,5 +1,9 @@
 package com.endl.loopin.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 /**
@@ -15,9 +19,13 @@ import lombok.Data;
  */
 @Data
 public class SignUpUserDto {
-
-    // TODO: @kunal add field validation
+    @NotBlank(message = "Name cannot be blank")
+    @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters")
     private String name;
+
+    @Email(message = "Email should be valid")
     private String email;
-    private String passwordHash;
+
+    @NotBlank(message = "Password cannot be blank")
+    private String password;
 }
