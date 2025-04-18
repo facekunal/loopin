@@ -2,13 +2,18 @@ package com.endl.loopin.entity;
 
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.endl.loopin.util.session.SessionStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,21 +24,27 @@ import jakarta.persistence.Table;
 @Data // generate getters, setters, toString, equals, and hashCode
 public class Session {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
+    @Column(nullable = false)
     private String userId;
 
-    private Timestamp startedAt;
+    @Column(nullable = false)
+    private Instant startedAt;
 
-    private Timestamp lastActiveAt;
+    private Instant lastActiveAt;
     
     private String userAgent;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SessionStatus status = SessionStatus.ACTIVE;
     
     @CreatedDate
-    @Column(updatable = false)
-    private Timestamp createdAt;
+    @Column(updatable = false, nullable = false)
+    private Instant createdAt;
 
     @LastModifiedDate
-    private Timestamp updatedAt;
+    private Instant updatedAt;
 }
